@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>حاسبة تمويل السيارات — أ/ عمرو عادل كمال</title>
+  <style>
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Arial, sans-serif; }
+    body {
+      margin: 0;
+      padding: 16px;
+      background: #0b0f17;
+      color: #f8fafc;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      background: #121826;
+      border: 1px solid #243046;
+      border-radius: 14px;
+      padding: 14px 18px;
+      margin-bottom: 14px;
+    }
+    .brand-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .brand-sub {
+      font-size: 13px;
+      color: #60a5fa;
+      font-weight: 600;
+    }
+    .badge-live {
+      background: rgba(34, 197, 94, 0.14);
+      color: #4ade80;
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .card {
+      background: #121826;
+      border: 1px solid #243046;
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+    .card-title {
+      margin: 0 0 14px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #f1f5f9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #1e293b;
+      padding-bottom: 10px;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 14px;
+    }
+    .field {
+      margin-bottom: 12px;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      color: #cbd5e1;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    input, select {
+      width: 100%;
+      padding: 11px 13px;
+      border-radius: 10px;
+      border: 1px solid #2d3b55;
+      background: #0b0f17;
+      color: #ffffff;
+      font-size: 15px;
+      outline: none;
+    }
+    input:focus, select:focus {
+      border-color: #3b82f6;
+    }
+    .seg-group {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .seg-group.two-col {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .seg-btn {
+      padding: 10px 8px;
+      border-radius: 10px;
+      border: 1px solid #2d3b55;
+      background: #0b0f17;
+      color: #cbd5e1;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .seg-btn.active {
+      background: #2563eb;
+      border-color: #60a5fa;
+      color: #ffffff;
+    }
+    .years-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .year-btn {
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #2d3b55;
+      background: #0b0f17;
+      color: #e2e8f0;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .year-btn.active {
+      background: #1d4ed8;
+      border-color: #60a5fa;
+      color: #ffffff;
+    }
+    .quick-pcts {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .chip-btn {
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid #2d3b55;
+      background: #0b0f17;
+      color: #93c5fd;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .hint {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: 5px;
+    }
+    .warn {
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      color: #fcd34d;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 12.5px;
+      margin-top: 8px;
+    }
+    .summary-banner {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.18), rgba(15, 23, 42, 0.9));
+      border: 1px solid #3b82f6;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+    .summary-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .down-label {
+      font-size: 18px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+    .meta-line {
+      font-size: 13px;
+      color: #cbd5e1;
+    }
+    .installment-box {
+      background: #0b0f17;
+      border: 1px solid #243046;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .installment-val {
+      font-size: 24px;
+      font-weight: 800;
+      color: #38bdf8;
+    }
+    .rows {
+      border-top: 1px solid #1e293b;
+    }
+    .row-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 2px;
+      border-bottom: 1px solid #1e293b;
+      font-size: 14px;
+    }
+    .row-item .muted {
+      display: block;
+      font-size: 11.5px;
+      color: #94a3b8;
+    }
+    .cash-box {
+      background: rgba(22, 163, 74, 0.14);
+      border: 1px solid rgba(34, 197, 94, 0.45);
+      border-radius: 12px;
+      padding: 14px;
+      margin: 14px 0;
+    }
+    .cash-box .title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #86efac;
+    }
+    .cash-box .sub {
+      font-size: 12px;
+      color: #bbf7d0;
+      margin-top: 2px;
+    }
+    .cash-box .total {
+      font-size: 22px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-top: 8px;
+    }
+    textarea {
+      width: 100%;
+      min-height: 175px;
+      border-radius: 10px;
+      border: 1px solid #2d3b55;
+      background: #0b0f17;
+      color: #f8fafc;
+      padding: 12px;
+      font-size: 13.5px;
+      resize: vertical;
+    }
+    .btns {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .btn {
+      padding: 11px 16px;
+      border-radius: 10px;
+      border: none;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-primary { background: #2563eb; color: #fff; }
+    .btn-wa { background: #16a34a; color: #fff; }
+    .footer {
+      text-align: center;
+      color: #94a3b8;
+      font-size: 12.5px;
+      padding: 10px 0 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <div>
+        <div class="brand-title">حاسبة تمويل السيارات</div>
+        <div class="brand-sub">أ/ عمرو عادل كمال — مستشار مبيعات وتقسيط السيارات</div>
+      </div>
+      <div class="badge-live">● حساب فوري</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <span>بيانات التمويل والعرض</span>
+      </div>
+
+      <div class="grid-2">
+        <div class="field">
+          <label for="clientName">اسم العميل</label>
+          <input id="clientName" type="text" value="أ/ علاء" oninput="recalc()" />
+        </div>
+
+        <div class="field">
+          <label for="bankSelect">الجهة / البنك</label>
+          <select id="bankSelect" onchange="onBankChange()">
+            <option value="تنمية الصادرات (E-Bank)">تنمية الصادرات (E-Bank)</option>
+            <option value="البنك الزراعي المصري (ABE)">البنك الزراعي المصري (ABE)</option>
+            <option value="مصرف أبوظبي الإسلامي (ADIB)">مصرف أبوظبي الإسلامي (ADIB)</option>
+            <option value="بنك التعمير والإسكان (HDB)">بنك التعمير والإسكان (HDB)</option>
+            <option value="شركة درايف (Drive)">شركة درايف (Drive)</option>
+            <option value="بنك الكويت الوطني (NBK)">بنك الكويت الوطني (NBK)</option>
+            <option value="شركة سهولة (SeHola)">شركة سهولة (SeHola)</option>
+            <option value="البنك المصري الخليجي (EG Bank)">البنك المصري الخليجي (EG Bank)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="field">
+          <label>نوع السيارة</label>
+          <div class="seg-group" id="carTypeGroup">
+            <button type="button" class="seg-btn active" data-val="ملاكي" onclick="setSeg('carTypeGroup', this)">ملاكي</button>
+            <button type="button" class="seg-btn" data-val="ربع نقل" onclick="setSeg('carTypeGroup', this)">ربع نقل</button>
+            <button type="button" class="seg-btn" data-val="جامبو" onclick="setSeg('carTypeGroup', this)">جامبو</button>
+          </div>
+          <div class="warn" id="carTypeHint">
+            تخضع سيارات (ربع نقل وجامبو) لمصاريف وتأمين إجباري حسب سياسة الجهة الممولة.
+          </div>
+        </div>
+
+        <div class="field">
+          <label>نوع العميل</label>
+          <div class="seg-group two-col" id="clientTypeGroup">
+            <button type="button" class="seg-btn active" data-val="موظف" onclick="setSeg('clientTypeGroup', this)">موظف</button>
+            <button type="button" class="seg-btn" data-val="صاحب عمل" onclick="setSeg('clientTypeGroup', this)">صاحب عمل</button>
+          </div>
+          <div class="hint">يُراعى اختلاف الشروط والسياسات بين الموظف وصاحب العمل حسب كل بنك.</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="field">
+          <label for="carPrice">سعر السيارة (ج.م)</label>
+          <input id="carPrice" type="number" placeholder="أدخل سعر السيارة" min="0" step="1000" oninput="syncDownFromPct()" />
+          <div class="hint" id="priceStatus">أدخل سعر السيارة لحساب الأقساط والمقدم بدقة.</div>
+        </div>
+
+        <div class="field">
+          <label for="downAmount">قيمة المقدم (ج.م) — <span id="downPctBadge">0%</span></label>
+          <input id="downAmount" type="number" placeholder="أدخل قيمة المقدم" min="0" step="1000" oninput="syncPctFromAmount()" />
+          <div class="quick-pcts">
+            <button type="button" class="chip-btn" onclick="applyQuickPct(20)">20%</button>
+            <button type="button" class="chip-btn" onclick="applyQuickPct(25)">25%</button>
+            <button type="button" class="chip-btn" onclick="applyQuickPct(30)">30%</button>
+            <button type="button" class="chip-btn" onclick="applyQuickPct(35)">35%</button>
+            <button type="button" class="chip-btn" onclick="applyQuickPct(40)">40%</button>
+            <button type="button" class="chip-btn" onclick="applyQuickPct(50)">50%</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>مدة القرض بالسنوات — <span id="monthsBadge">60 قسط</span></label>
+        <div class="years-grid" id="yearsGroup">
+          <button type="button" class="year-btn" data-y="1" onclick="setYear(1, this)">1</button>
+          <button type="button" class="year-btn" data-y="2" onclick="setYear(2, this)">2</button>
+          <button type="button" class="year-btn" data-y="3" onclick="setYear(3, this)">3</button>
+          <button type="button" class="year-btn" data-y="4" onclick="setYear(4, this)">4</button>
+          <button type="button" class="year-btn active" data-y="5" onclick="setYear(5, this)">5</button>
+          <button type="button" class="year-btn" data-y="6" onclick="setYear(6, this)">6</button>
+          <button type="button" class="year-btn" data-y="7" onclick="setYear(7, this)">7</button>
+          <button type="button" class="year-btn" data-y="8" onclick="setYear(8, this)">8</button>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="field">
+          <label for="interestRate">سعر الفائدة السنوية (%)</label>
+          <input id="interestRate" type="number" value="14.5" step="0.05" oninput="recalc()" />
+          <div class="hint">يُحدَّد تلقائياً ويمكن تعديله يدوياً حسب البرنامج والمدة.</div>
+        </div>
+
+        <div class="field">
+          <label for="adminPct">نسبة المصاريف الإدارية (%)</label>
+          <input id="adminPct" type="number" value="0" step="0.1" oninput="recalc()" />
+          <div class="hint">تُحسب على <strong>مبلغ التمويل</strong> وتُدفع كاش.</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="field">
+          <label for="insurancePct">نسبة التأمين (%)</label>
+          <input id="insurancePct" type="number" value="2" step="0.1" oninput="recalc()" />
+          <div class="hint">تُحسب على <strong>سعر السيارة</strong> (يمكن جعلها 0% إذا كانت بدون تأمين).</div>
+        </div>
+
+        <div class="field">
+          <label for="extraFees">رسوم إضافية / كود مرور (ج.م)</label>
+          <input id="extraFees" type="number" value="0" step="50" oninput="recalc()" />
+          <div class="hint">مثال: 850 ج.م كود مرور البنك الزراعي إن وُجد.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <span>ملخص العرض</span>
+        <span style="font-size: 12px; color: #4ade80;">● مباشر</span>
+      </div>
+
+      <div class="summary-banner">
+        <div class="summary-top">
+          <div class="down-label" id="sumDownLabel">بدون مقدم 0%</div>
+          <div class="meta-line" id="sumYearsText">5 سنوات</div>
+        </div>
+        <div class="meta-line" id="sumMetaText">تنمية الصادرات (E-Bank) • ملاكي • موظف</div>
+      </div>
+
+      <div class="installment-box">
+        <div>
+          <div style="font-weight: 700; font-size: 15px;">القسط الشهري</div>
+          <div style="font-size: 12.5px; color: #94a3b8;" id="installmentSub">5 سنوات • 60 قسط</div>
+        </div>
+        <div class="installment-val" id="resInstallment">—</div>
+      </div>
+
+      <div class="rows">
+        <div class="row-item">
+          <span>سعر السيارة</span>
+          <strong id="resPrice">0 ج.م</strong>
+        </div>
+        <div class="row-item">
+          <span>قيمة المقدم</span>
+          <strong id="resDown">0 ج.م (0%)</strong>
+        </div>
+        <div class="row-item">
+          <span>مبلغ التمويل</span>
+          <strong id="resLoan">0 ج.م</strong>
+        </div>
+        <div class="row-item">
+          <span>الفائدة السنوية</span>
+          <strong id="resRate">14.5%</strong>
+        </div>
+        <div class="row-item">
+          <span>المصاريف الإدارية <span class="muted">على مبلغ التمويل</span></span>
+          <strong id="resAdmin">0 ج.م</strong>
+        </div>
+        <div class="row-item">
+          <span>مصاريف التأمين <span class="muted">على سعر السيارة</span></span>
+          <strong id="resInsurance">0 ج.م</strong>
+        </div>
+        <div class="row-item" id="rowExtra" style="display: none;">
+          <span>رسوم إضافية / كود مرور</span>
+          <strong id="resExtra">0 ج.م</strong>
+        </div>
+      </div>
+
+      <div class="cash-box">
+        <div class="title">إجمالي المطلوب كاش عند الاستلام</div>
+        <div class="sub">المقدم + المصاريف الإدارية + التأمين + أي رسوم إضافية</div>
+        <div class="total" id="resTotalCash">0 ج.م</div>
+      </div>
+
+      <div class="rows" style="border-top: none;">
+        <div class="row-item">
+          <span>إجمالي الفوائد</span>
+          <strong id="resTotalInterest">—</strong>
+        </div>
+        <div class="row-item">
+          <span>إجمالي المبلغ المسدد</span>
+          <strong id="resTotalPayable">—</strong>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top: 14px;">
+        <label for="waText">رسالة العرض للعميل (واتساب)</label>
+        <textarea id="waText" readonly></textarea>
+      </div>
+
+      <div class="btns">
+        <button type="button" class="btn btn-primary" onclick="copyPitch()">نسخ تفاصيل العرض للعميل</button>
+        <a id="waSendBtn" class="btn btn-wa" target="_blank" rel="noopener">إرسال عبر واتساب</a>
+      </div>
+    </div>
+
+    <div class="footer">
+      <strong>أ/ عمرو عادل كمال</strong> — أداة مبيعات وتقسيط السيارات. الأرقام تقديرية وتخضع لسياسة الجهة الممولة والموافقة النهائية.
+    </div>
+  </div>
+
+  <script>
+    let currentYears = 5;
+    let currentDownPct = 0;
+
+    function getSegVal(id) {
+      const el = document.querySelector(`#${id} .seg-btn.active`);
+      return el ? el.dataset.val : '';
+    }
+
+    function setSeg(id, btn) {
+      document.querySelectorAll(`#${id} .seg-btn`).forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      recalc();
+    }
+
+    function setYear(y, btn) {
+      currentYears = y;
+      document.querySelectorAll('#yearsGroup .year-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('monthsBadge').textContent = `${y} سنوات • ${y * 12} قسط`;
+      document.getElementById('installmentSub').textContent = `${y} سنوات • ${y * 12} قسط`;
+      recalc();
+    }
+
+    function applyQuickPct(pct) {
+      const price = parseFloat(document.getElementById('carPrice').value) || 0;
+      currentDownPct = pct;
+      if (price > 0) {
+        document.getElementById('downAmount').value = Math.round(price * (pct / 100));
+      }
+      document.getElementById('downPctBadge').textContent = `${pct}%`;
+      recalc();
+    }
+
+    function syncDownFromPct() {
+      const price = parseFloat(document.getElementById('carPrice').value) || 0;
+      if (price > 0 && currentDownPct > 0) {
+        document.getElementById('downAmount').value = Math.round(price * (currentDownPct / 100));
+      }
+      recalc();
+    }
+
+    function syncPctFromAmount() {
+      const price = parseFloat(document.getElementById('carPrice').value) || 0;
+      const down = parseFloat(document.getElementById('downAmount').value) || 0;
+      currentDownPct = price > 0 ? Math.round((down / price) * 1000) / 10 : 0;
+      document.getElementById('downPctBadge').textContent = `${currentDownPct}%`;
+      recalc();
+    }
+
+    function onBankChange() {
+      const bank = document.getElementById('bankSelect').value;
+      const adminEl = document.getElementById('adminPct');
+      const insEl = document.getElementById('insurancePct');
+      const extraEl = document.getElementById('extraFees');
+
+      if (bank.includes('ABE') || bank.includes('الزراعي')) {
+        adminEl.value = 0;
+        extraEl.value = 850;
+      } else if (bank.includes('E-Bank')) {
+        adminEl.value = 0;
+        extraEl.value = 0;
+      } else {
+        extraEl.value = 0;
+      }
+      recalc();
+    }
+
+    function fmtMoney(n) {
+      return Math.round(n).toLocaleString('en-US') + ' ج.م';
+    }
+
+    function recalc() {
+      const clientName = document.getElementById('clientName').value.trim() || 'العميل';
+      const bank = document.getElementById('bankSelect').value;
+      const carType = getSegVal('carTypeGroup');
+      const clientType = getSegVal('clientTypeGroup');
+
+      const price = Math.max(0, parseFloat(document.getElementById('carPrice').value) || 0);
+      let down = Math.max(0, parseFloat(document.getElementById('downAmount').value) || 0);
+      if (price > 0 && down > price) down = price;
+
+      const pct = price > 0 ? Math.round((down / price) * 1000) / 10 : currentDownPct;
+      currentDownPct = pct;
+      document.getElementById('downPctBadge').textContent = `${pct}%`;
+
+      const ratePct = Math.max(0, parseFloat(document.getElementById('interestRate').value) || 0);
+      const adminPct = Math.max(0, parseFloat(document.getElementById('adminPct').value) || 0);
+      const insPct = Math.max(0, parseFloat(document.getElementById('insurancePct').value) || 0);
+      const extra = Math.max(0, parseFloat(document.getElementById('extraFees').value) || 0);
+
+      const loanAmount = Math.max(0, price - down);
+      const adminFees = loanAmount * (adminPct / 100);
+      const insuranceFees = price * (insPct / 100);
+      const totalCash = down + adminFees + insuranceFees + extra;
+
+      const totalInterest = loanAmount * (ratePct / 100) * currentYears;
+      const totalPayable = loanAmount + totalInterest;
+      const monthly = totalPayable / (currentYears * 12);
+
+      document.getElementById('priceStatus').textContent = price > 0
+        ? 'تم تحديث الحساب تلقائياً.'
+        : 'أدخل سعر السيارة لعرض القسط الشهري وحساب النسب بدقة.';
+
+      document.getElementById('sumDownLabel').textContent = down > 0
+        ? `مقدم ${pct}% (${fmtMoney(down)})`
+        : 'بدون مقدم 0%';
+      document.getElementById('sumYearsText').textContent = `${currentYears} سنوات`;
+      document.getElementById('sumMetaText').textContent = `${bank} • ${carType} • ${clientType}`;
+
+      document.getElementById('resPrice').textContent = fmtMoney(price);
+      document.getElementById('resDown').textContent = `${fmtMoney(down)} (${pct}%)`;
+      document.getElementById('resLoan').textContent = fmtMoney(loanAmount);
+      document.getElementById('resRate').textContent = `${ratePct}%`;
+      document.getElementById('resAdmin').textContent = fmtMoney(adminFees);
+      document.getElementById('resInsurance').textContent = fmtMoney(insuranceFees);
+
+      const rowExtra = document.getElementById('rowExtra');
+      if (extra > 0) {
+        rowExtra.style.display = 'flex';
+        document.getElementById('resExtra').textContent = fmtMoney(extra);
+      } else {
+        rowExtra.style.display = 'none';
+      }
+
+      document.getElementById('resTotalCash').textContent = fmtMoney(totalCash);
+
+      if (price > 0 && loanAmount > 0) {
+        document.getElementById('resInstallment').textContent = fmtMoney(monthly);
+        document.getElementById('resTotalInterest').textContent = fmtMoney(totalInterest);
+        document.getElementById('resTotalPayable').textContent = fmtMoney(totalPayable);
+      } else {
+        document.getElementById('resInstallment').textContent = '—';
+        document.getElementById('resTotalInterest').textContent = '—';
+        document.getElementById('resTotalPayable').textContent = '—';
+      }
+
+      const pitch =
+`أهلاً بحضرتك يا ${clientName}، ده ملخص عرض التمويل المبدئي:
+• الجهة: ${bank}
+• نوع السيارة: ${carType} | فئة العميل: ${clientType}
+• سعر السيارة: ${fmtMoney(price)}
+• المقدم (${pct}%): ${fmtMoney(down)}
+• مبلغ التمويل: ${fmtMoney(loanAmount)}
+• المصاريف الإدارية (${adminPct}%): ${fmtMoney(adminFees)}
+• التأمين (${insPct}%): ${fmtMoney(insuranceFees)}${extra > 0 ? `\n• رسوم إضافية: ${fmtMoney(extra)}` : ''}
+• إجمالي المطلوب كاش عند الاستلام: ${fmtMoney(totalCash)}
+• القسط الشهري (${currentYears} سنوات / ${currentYears * 12} قسط): ${price > 0 && loanAmount > 0 ? fmtMoney(monthly) : '—'}
+
+م/ أ/ عمرو عادل كمال — مستشار مبيعات وتقسيط السيارات
+(الأرقام تقديرية وتخضع لسياسة الجهة الممولة والموافقة النهائية)`;
+
+      document.getElementById('waText').value = pitch;
+      document.getElementById('waSendBtn').href = 'https://wa.me/?text=' + encodeURIComponent(pitch);
+    }
+
+    function copyPitch() {
+      const ta = document.getElementById('waText');
+      ta.select();
+      navigator.clipboard.writeText(ta.value).then(() => {
+        alert('تم نسخ تفاصيل العرض للعميل بنجاح.');
+      }).catch(() => {
+        document.execCommand('copy');
+        alert('تم نسخ تفاصيل العرض للعميل.');
+      });
+    }
+
+    recalc();
+  </script>
+</body>
+</html>
